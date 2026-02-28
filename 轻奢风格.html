@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<title>古月·轻奢商业门头智能生成系统 V2.0</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;font-family:"Microsoft YaHei",sans-serif}
+body{
+  background:linear-gradient(135deg,#F8F9FA,#EEF1F4);
+  min-height:100vh;
+  padding:20px 0 80px;
+}
+.header{
+  background:linear-gradient(90deg,#3A3F44,#6C757D);
+  color:#fff;
+  text-align:center;
+  padding:45px 20px;
+  border-radius:0 0 18px 18px;
+  box-shadow:0 8px 24px rgba(0,0,0,0.15);
+}
+.header h1{font-size:30px;margin-bottom:10px}
+.header p{opacity:.9;font-size:14px}
+
+.container{
+  max-width:900px;
+  margin:30px auto;
+  background:#fff;
+  padding:30px;
+  border-radius:18px;
+  box-shadow:0 10px 30px rgba(0,0,0,0.06);
+}
+
+.label{margin:15px 0 8px;font-weight:600;color:#333}
+
+.input-box,select{
+  width:100%;
+  padding:14px;
+  border:1px solid #E0E3E7;
+  border-radius:10px;
+  font-size:15px;
+  margin-bottom:10px;
+  outline:none;
+}
+.input-box:focus,select:focus{
+  border-color:#495057;
+  box-shadow:0 0 0 3px rgba(73,80,87,.1);
+}
+
+.btn{
+  width:100%;
+  padding:16px;
+  background:linear-gradient(90deg,#3A3F44,#6C757D);
+  color:#fff;
+  border:none;
+  border-radius:10px;
+  font-size:16px;
+  cursor:pointer;
+  margin-top:15px;
+}
+.btn:hover{transform:translateY(-2px);box-shadow:0 10px 20px rgba(0,0,0,.15)}
+.btn:disabled{background:#ADB5BD;cursor:not-allowed}
+
+.result-wrap{margin-top:30px}
+
+.result-item{
+  background:#fff;
+  padding:18px;
+  border-left:4px solid #495057;
+  margin-bottom:12px;
+  border-radius:10px;
+  box-shadow:0 3px 10px rgba(0,0,0,.05);
+  display:flex;
+  justify-content:space-between;
+  gap:15px;
+}
+.item-text{font-size:14px;line-height:1.6;color:#374151}
+.copy-btn{
+  padding:6px 10px;
+  background:#495057;
+  color:#fff;
+  border:none;
+  border-radius:6px;
+  cursor:pointer;
+}
+.copy-btn:hover{background:#343A40}
+
+.copy-all{
+  margin-top:15px;
+  padding:10px 20px;
+  background:#343A40;
+  color:#fff;
+  border:none;
+  border-radius:8px;
+  cursor:pointer;
+}
+</style>
+</head>
+
+<body>
+
+<div class="header">
+  <h1>✨ 古月 · 轻奢商业门头智能生成系统</h1>
+  <p>真随机算法｜结构可控｜场景可控｜8K写实｜100%可施工</p>
+</div>
+
+<div class="container">
+
+  <div class="label">店铺行业类型</div>
+  <input type="text" id="industry" class="input-box" placeholder="例如：美容、医美、咖啡、珠宝、服装">
+
+  <div class="label">门头结构造型</div>
+  <select id="structure">
+    <option value="普通立面结构">普通立面结构</option>
+    <option value="双层造型结构">双层造型结构</option>
+    <option value="悬浮式结构">悬浮式结构</option>
+    <option value="金属框架造型">金属框架造型</option>
+    <option value="极简无边框结构">极简无边框结构</option>
+  </select>
+
+  <div class="label">场景环境模式</div>
+  <select id="scene">
+    <option value="白天自然光，门头正立面，平视无遮挡">白天商业效果图</option>
+    <option value="夜间灯光氛围，发光字明显，商业街场景">黑夜灯光效果图</option>
+    <option value="商场室内空间场景，现代商业环境">商场室内效果</option>
+    <option value="高端商业街区环境，临街店铺效果">高端商业街效果</option>
+  </select>
+
+  <button class="btn" onclick="generate()">🚀 生成20组商业提示词</button>
+
+  <div class="result-wrap" id="result"></div>
+
+</div>
+
+<script>
+
+function randomPick(arr){
+  return arr[Math.floor(Math.random()*arr.length)];
+}
+
+const styleLib=["轻奢高级","低调奢华","现代轻奢","极简轻奢风","高级质感"];
+const materialLib=[
+  "大理石+金属线条",
+  "不锈钢+镜面板",
+  "亚克力发光字+烤漆板",
+  "金属包边+精工金字",
+  "玻璃幕墙+暗藏灯带"
+];
+const sloganLib=[
+  "雅致精致标语",
+  "轻奢格调标语",
+  "高级质感标语",
+  "奢雅大气标语",
+  "精致美学标语"
+];
+const lightingLib=[
+  "暗藏氛围灯",
+  "背光发光字",
+  "线性灯带设计",
+  "隐藏式灯光结构"
+];
+const textureLib=[
+  "细节丰富",
+  "材质层次清晰",
+  "金属反光质感",
+  "高级商业肌理"
+];
+
+function generate(){
+  const industry=document.getElementById("industry").value.trim();
+  const structure=document.getElementById("structure").value;
+  const scene=document.getElementById("scene").value;
+  const result=document.getElementById("result");
+
+  if(!industry){
+    alert("请输入行业类型");
+    return;
+  }
+
+  result.innerHTML="";
+  let allText=[];
+
+  for(let i=0;i<20;i++){
+    const prompt=`${scene}，完整展示，${structure}，${industry}店铺门头，${randomPick(styleLib)}，${randomPick(materialLib)}，品牌店名+${randomPick(sloganLib)}，${randomPick(lightingLib)}，8K高清写实效果图，${randomPick(textureLib)}，可直接施工参考 ——古月AI商业视觉系统`;
+
+    allText.push(prompt);
+
+    result.innerHTML+=`
+      <div class="result-item">
+        <div class="item-text">${i+1}. ${prompt}</div>
+        <button class="copy-btn" onclick="navigator.clipboard.writeText(\`${prompt}\`)">复制</button>
+      </div>
+    `;
+  }
+
+  result.innerHTML+=`<button class="copy-all" onclick="navigator.clipboard.writeText(\`${allText.join("\n\n")}\`)">📋 一键复制全部</button>`;
+}
+
+</script>
+
+</body>
+</html>
